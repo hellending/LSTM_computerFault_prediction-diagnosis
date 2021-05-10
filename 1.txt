@@ -1,0 +1,10 @@
+  computer com3 = new computer();
+        com3.setCpuTem(Double.parseDouble(cpu_temp3));
+        com3.setGpuPower(Double.parseDouble(gpu_power3));
+        com3.setSysTem(Double.parseDouble(system_temp3));
+        com3.setGpuTem(Double.parseDouble(gpu_tem3));
+        com3.setCpuFrequency(Double.parseDouble(cpu_frequency3));
+        com3.setCpuPower(Double.parseDouble(cpu_power3));
+        com3.setPowerTem(Double.parseDouble(power_tem3));
+        com3.setFanSpeed(Double.parseDouble(fan_speed3));
+        list.add(com3);

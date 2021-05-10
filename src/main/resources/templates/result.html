@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>预测结果查看</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/layui/css/layui.css"  media="all">
+    <title>预测</title>
+</head>
+
+<body>
+<a1 style="font-size: 30px;align-content: center;position: absolute;left: 40%">预测诊断结果查看窗口</a1>
+<label><strong>预测结果:</strong></label>
+<div>
+    <table class="layui-hide" id="demo" lay-filter="test"></table>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="detail">更多</a>
+    </script>
+</div>
+
+<br><br><br><br><br><br>
+<label><strong>诊断结果:</strong></label>
+<div align="left" style="border: 1px solid;border-radius: 10px;width: 1000px;">
+    <label style="color: #0e0c0d;font-size: 50px;">[[${info}]]</label>
+</div>
+
+<br><br><br>
+<form action="/back" method="post">
+    <button style="height: 50px;width: 100px;margin-left: 800px;" id="back" class="layui-btn layui-btn-radius layui-btn-normal" >返回</button>
+</form>
+
+</body>
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
+<script src="https://www.layuicdn.com/layui/layui.js"></script>
+<script th:inline="none">
+    //JavaScript代码区域
+    layui.use('element', function(){
+        var element = layui.element;
+
+    });
+
+
+    //加载模块（从layui 2.6 开始，第一个参数不传即代表加载所有内置模块）
+    layui.use(function(){ //加载特定模块：layui.use(['layer', 'laydate', function(){
+        //得到各种内置组件
+        var layer = layui.layer //弹层
+            ,table = layui.table //表格
+            ,element = layui.element //元素操作
+            ,dropdown = layui.dropdown //下拉菜单
+
+        //监听Tab切换
+        element.on('tab(demo)', function(data){
+            layer.tips('切换了 '+ data.index +'：'+ this.innerHTML, this, {
+                tips: 1
+            });
+        });
+
+        //执行一个 table 实例
+        table.render({
+            elem: '#demo'
+            ,height: 420
+            ,url: '/readExcelResponse' //数据接口
+            ,title: '用户表'
+            ,page: true //开启分页
+            ,toolbar: 'none' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+            ,cols: [[ //表头
+                {type: 'checkbox', fixed: 'left'}
+                ,{field: 'stu_num', title: 'CPU温度', width: 140, sort: true, totalRow: true}
+                ,{field: 'name', title: 'CPU频率', width:120, sort: true}
+                ,{field: 'eva_value', title: '转速', width:160, sort: true}
+                ,{field: 'eva_value', title: 'CPU功耗', width:160, sort: true}
+                ,{field: 'eva_value', title: 'GPU温度', width:160, sort: true}
+                ,{field: 'eva_value', title: '系统温度', width:160, sort: true}
+                ,{field: 'eva_value', title: '电源温度', width:160, sort: true}
+                ,{field: 'eva_value', title: '显卡功耗', width:160, sort: true}
+            ]]
+        });
+    });
+</script>
+</html>

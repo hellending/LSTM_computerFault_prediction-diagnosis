@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>计算机故障预测诊断专家系统</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/layui/css/layui.css"  media="all">
+    <title>预测</title>
+</head>
+
+<body background="/img/1.jfif">
+<a1 style="font-size: 30px;align-content: center;position: absolute;left: 30%">基于LSTM的计算机故障预测诊断专家系统</a1>
+<div style="position: absolute;margin-top: 50px;">
+    <strong>
+        <label style="font-size: 15px;">这是一款由本团队研发的基于LSTM的计算机故障诊断专家系统，您在使用时可以有两种选择</label><br>
+        <label style="font-size: 15px;">1.导入excel表格,下载excel模板,按要求填入数据然后导入表格到系统中进行预测</label><br>
+        <label style="font-size: 15px;">2.按要求在本页面手动输入24组所需数据进行预测</label><br>
+        <label style="font-size: 15px;">注意:本系统需要输入三组数据,分别为前1.5小时每隔半小时从电脑采集的数据,非专业人员建议使用AIDA 64或MSI Afterburner进行数据采集</label>
+    </strong>
+</div>
+<form style="position: absolute;margin-top: 150px;">
+    <label>导入excel表格:</label><input type="file" id="file">
+    <input type="submit" value="预测" class="layui-btn layui-btn-radius layui-btn-normal">
+    <input type="reset" value="下载excel模板" class="layui-btn layui-btn-radius layui-btn-normal">
+</form>
+<form class="layui-form" action="/calculate" method="post" style="position: absolute;top: 170px;">
+    <br><br><br>
+    <div class="layui-form-item">
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 80px;padding-left: 0px;padding-right: 0px;padding-top: 10px;" class="layui-form-label">CPU温度：</label>
+            <div style="width: 100px;padding: 0px;margin-right: 0px;" class="layui-input-inline">
+                <input type="text" style="border-radius: 10px;" name="cpu_temp1" id="cpu_temp1" required  lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 80px;padding-left: 0px;padding-right: 0px;padding-top: 10px;" class="layui-form-label">CPU频率：</label>
+            <div style="width: 100px;margin-right: 0px;" class="layui-input-inline">
+                <input  type="text" style="border-radius: 10px;" name="cpu_frequency1" id="cpu_frequency1" required  lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 80px;padding-left: 0px;padding-right: 0px;padding-top: 10px;" class="layui-form-label">转速：</label>
+            <div style="width: 100px;margin-right: 0px;" class="layui-input-inline">
+                <input  type="text" style="border-radius: 10px;" name="fan_speed1" id="fan_speed1" required  lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 80px;padding-left: 0px;padding-right: 0px;padding-top: 10px;" class="layui-form-label">CPU功耗：</label>
+            <div style="width: 100px;margin-right: 0px;" class="layui-input-inline">
+                <input  type="text" name="cpu_power1" style="border-radius: 10px;" id="cpu_power1" required  lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 80px;padding-left: 0px;padding-right: 0px;padding-top: 10px;" class="layui-form-label">GPU温度：</label>
+            <div style="width: 100px;margin-right: 0px;" class="layui-input-inline">
+                <input  type="text" name="gpu_tem1" id="gpu_tem1" style="border-radius: 10px;" required  lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 80px;padding-left: 0px;padding-right: 0px;padding-top: 10px;" class="layui-form-label">系统温度：</label>
+            <div style="width: 100px;margin-right: 0px;" class="layui-input-inline">
+                <input  type="text" name="system_temp1" style="border-radius: 10px;" id="system_temp1" required  lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 80px;padding-left: 0px;padding-right: 0px;padding-top: 10px;" class="layui-form-label">电源温度：</label>
+            <div style="width: 100px;margin-right: 0px;" class="layui-input-inline">
+                <input  type="text" name="power_tem1" id="power_tem1" style="border-radius: 10px;" required  lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 80px;padding-left: 0px;padding-right: 0px;padding-top: 10px;" class="layui-form-label">显卡功耗：</label>
+            <div style="width: 100px;margin-right: 0px;" class="layui-input-inline">
+                <input  type="text" name="gpu_power1" style="border-radius: 10px;" id="gpu_power1" required  lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+
+    <br><br><br>
+    <div class="layui-form-item">
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 80px;padding-left: 0px;padding-right: 0px;padding-top: 10px;" class="layui-form-label">CPU温度：</label>
+            <div style="width: 100px;padding: 0px;margin-right: 0px;" class="layui-input-inline">
+                <input type="text" name="cpu_temp2"  style="border-radius: 10px;" id="cpu_temp2" required  lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 80px;padding-left: 0px;padding-right: 0px;padding-top: 10px;" class="layui-form-label">CPU频率：</label>
+            <div style="width: 100px;margin-right: 0px;" class="layui-input-inline">
+                <input  type="text" name="cpu_frequency2" style="border-radius: 10px;" id="cpu_frequency2" required  lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 80px;padding-left: 0px;padding-right: 0px;padding-top: 10px;" class="layui-form-label">转速：</label>
+            <div style="width: 100px;margin-right: 0px;" class="layui-input-inline">
+                <input  type="text" name="fan_speed2" style="border-radius: 10px;" id="fan_speed2" required  lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 80px;padding-left: 0px;padding-right: 0px;padding-top: 10px;" class="layui-form-label">CPU功耗：</label>
+            <div style="width: 100px;margin-right: 0px;" class="layui-input-inline">
+                <input  type="text" name="cpu_power2" id="cpu_power2" required style="border-radius: 10px;"  lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 80px;padding-left: 0px;padding-right: 0px;padding-top: 10px;" class="layui-form-label">GPU温度：</label>
+            <div style="width: 100px;margin-right: 0px;" class="layui-input-inline">
+                <input  type="text" name="gpu_tem2" id="gpu_tem2" required  lay-verify="required" style="border-radius: 10px;"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 80px;padding-left: 0px;padding-right: 0px;padding-top: 10px;" class="layui-form-label">系统温度：</label>
+            <div style="width: 100px;margin-right: 0px;" class="layui-input-inline">
+                <input  type="text" name="system_temp2" id="system_temp2" style="border-radius: 10px;" required  lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 80px;padding-left: 0px;padding-right: 0px;padding-top: 10px;" class="layui-form-label">电源温度：</label>
+            <div style="width: 100px;margin-right: 0px;" class="layui-input-inline">
+                <input  type="text" name="power_tem2" id="power_tem2" style="border-radius: 10px;" required  lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 80px;padding-left: 0px;padding-right: 0px;padding-top: 10px;" class="layui-form-label">显卡功耗：</label>
+            <div style="width: 100px;margin-right: 0px;" class="layui-input-inline">
+                <input  type="text" name="gpu_power2" id="gpu_power2" required style="border-radius: 10px;"  lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+
+    <br><br><br>
+    <div class="layui-form-item">
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 80px;padding-left: 0px;padding-right: 0px;padding-top: 10px;" class="layui-form-label">CPU温度：</label>
+            <div style="width: 100px;padding: 0px;margin-right: 0px;" class="layui-input-inline">
+                <input type="text" name="cpu_temp3" id="cpu_temp3" required  lay-verify="required" style="border-radius: 10px;"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 80px;padding-left: 0px;padding-right: 0px;padding-top: 10px;" class="layui-form-label">CPU频率：</label>
+            <div style="width: 100px;margin-right: 0px;" class="layui-input-inline">
+                <input  type="text" name="cpu_frequency3" id="cpu_frequency3" required  lay-verify="required" style="border-radius: 10px;"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 80px;padding-left: 0px;padding-right: 0px;padding-top: 10px;" class="layui-form-label">转速：</label>
+            <div style="width: 100px;margin-right: 0px;" class="layui-input-inline">
+                <input  type="text" name="fan_speed3" style="border-radius: 10px;" id="fan_speed3" required  lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 80px;padding-left: 0px;padding-right: 0px;padding-top: 10px;" class="layui-form-label">CPU功耗：</label>
+            <div style="width: 100px;margin-right: 0px;" class="layui-input-inline">
+                <input  type="text" name="cpu_power3" style="border-radius: 10px;" id="cpu_power3" required  lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 80px;padding-left: 0px;padding-right: 0px;padding-top: 10px;" class="layui-form-label">GPU温度：</label>
+            <div style="width: 100px;margin-right: 0px;" class="layui-input-inline">
+                <input  type="text" name="gpu_tem3" style="border-radius: 10px;" id="gpu_tem3" required  lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 80px;padding-left: 0px;padding-right: 0px;padding-top: 10px;" class="layui-form-label">系统温度：</label>
+            <div style="width: 100px;margin-right: 0px;" class="layui-input-inline">
+                <input  type="text" name="system_temp3" style="border-radius: 10px;" id="system_temp3" required  lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 80px;padding-left: 0px;padding-right: 0px;padding-top: 10px;" class="layui-form-label">电源温度：</label>
+            <div style="width: 100px;margin-right: 0px;" class="layui-input-inline">
+                <input  type="text" name="power_tem3" style="border-radius: 10px;" id="power_tem3" required  lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 80px;padding-left: 0px;padding-right: 0px;padding-top: 10px;" class="layui-form-label">显卡功耗：</label>
+            <div style="width: 100px;margin-right: 0px;" class="layui-input-inline">
+                <input  type="text" name="gpu_power3" style="border-radius: 10px;" id="gpu_power3" required  lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+
+    <br><br><br>
+    <div class="layui-form-item">
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 100px;padding-left: 250px;padding-right: 10px;padding-top: 10px;" class="layui-form-label">CPU额定频率：</label>
+            <div style="width: 100px;padding: 0px;margin-right: 0px;" class="layui-input-inline">
+                <input type="text" name="cpu_normal_frequency" style="border-radius: 10px;" id="cpu_normal_frequency" required  lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 100px;padding-left: 30px;padding-right: 10px;padding-top: 10px;" class="layui-form-label">CPU额定功率：</label>
+            <div style="width: 100px;margin-right: 0px;" class="layui-input-inline">
+                <input  type="text" name="cpu_normal_rate" style="border-radius: 10px;" id="cpu_normal_rate" required  lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 120px;padding-left: 30px;padding-right: 10px;padding-top: 10px;" class="layui-form-label">GPU额定功率：</label>
+            <div style="width: 100px;margin-right: 0px;" class="layui-input-inline">
+                <input  type="text" name="gpu_normal_rate" style="border-radius: 10px;" id="gpu_normal_rate" required  lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div style="margin: 0px;" class="layui-inline">
+            <label style="width: 100px;padding-left: 30px;padding-right: 10px;padding-top: 10px;" class="layui-form-label">电源额定功率：</label>
+            <div style="width: 100px;margin-right: 0px;" class="layui-input-inline">
+                <input  type="text" name="power_normal_rate" style="border-radius: 10px;" id="power_normal_rate" required  lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+
+    <br><br><br>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button style="margin-left: -10px;margin-left: 450px;height: 50px;width: 100px;" id="submit_btn" class="layui-btn layui-btn-radius layui-btn-normal" lay-submit="" lay-filter="demo1">预测</button>
+            <button style="margin-left: 100px;height: 50px;width: 100px;" type="reset" class="layui-btn layui-btn-radius  layui-btn-danger">重置</button>
+        </div>
+    </div>
+
+
+
+</form>
+<script src="/layui/layui.js" charset="utf-8"></script>
+
+
+</body>
+</html>
